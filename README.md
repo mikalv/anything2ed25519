@@ -14,6 +14,8 @@ cd anything2ed25519
 
 ## Example usage
 
+**NOTE** Please don't be stupid and use this key, or anything else with a **WEAK** seed. (As "Hello World" is...)
+
 ```
 anything2ed25519 [main●] % echo "Hello World" | ./bin/anything2ed25519-darwin-amd64.macho
 -----BEGIN OPENSSH PRIVATE KEY-----
