@@ -1,4 +1,4 @@
-# Make a SSH Ed25519 of **anything**
+# Make a SSH Ed25519 private/public keypair of **anything** you can pipe into a UNIX pipe
 
 ## Compile
 

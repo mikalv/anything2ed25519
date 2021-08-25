@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-package=$1
+package=${1:-"0xcc.re/anything2ed25519"}
 if [[ -z "$package" ]]; then
   echo "usage: $0 <package-name>"
   exit 1
@@ -18,6 +18,12 @@ do
     output_name=$package_name'-'$GOOS'-'$GOARCH
     if [ $GOOS = "windows" ]; then
         output_name+='.exe'
+    else
+        if [ $GOOS = "darwin" ]; then
+          output_name+='.macho'
+        else
+          output_name+='.elf'
+        fi
     fi
 
     env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name $package
