@@ -77,6 +77,7 @@ func GenPrivKeyFromSecret(secret []byte) ed25519.PrivateKey {
 var (
 	printPrivToStdErr bool
 	writeToFiles      bool
+	forceStupidness   bool
 	pubKeyFile        string
 	privKeyFile       string
 )
@@ -84,6 +85,7 @@ var (
 func main() {
 	flag.BoolVar(&printPrivToStdErr, "privtoerr", false, "When true, the tool prints private key to stderr and public to stdout")
 	flag.BoolVar(&writeToFiles, "write", true, "When true it writes the private and public keys to file")
+	flag.BoolVar(&forceStupidness, "force", false, "When true, you ignore the author's recommendation about seed size\n(should be at minimum 32 chars, more is better) and continues with your stupidness")
 	flag.StringVar(&pubKeyFile, "pubfile", "id_ed25519.pub", "Filename to write public key to")
 	flag.StringVar(&privKeyFile, "privfile", "id_ed25519", "Filename to write private key to")
 	flag.Parse()
@@ -103,6 +105,11 @@ func main() {
 	if err != nil {
 		fmt.Printf("Failed to read from STDIN: %v\n", err)
 		return
+	}
+
+	if len(bytes) < 32 {
+		fmt.Println("WARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\nWARNING!\n")
+		fmt.Println("You should use some stronger seed than this! -force to override this idiot protection :)")
 	}
 
 	publicKey, privateKey, err := GenerateKeys(bytes)

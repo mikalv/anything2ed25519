@@ -2,6 +2,9 @@
 
 ```
 Usage of anything2ed25519:
+  -force
+    	When true, you ignore the author's recommendation about seed size
+    	(should be at minimum 32 chars, more is better) and continues with your stupidness
   -privfile string
     	Filename to write private key to (default "id_ed25519")
   -privtoerr
@@ -10,7 +13,6 @@ Usage of anything2ed25519:
     	Filename to write public key to (default "id_ed25519.pub")
   -write
     	When true it writes the private and public keys to file (default true)
-
 
 The command is intended to work with pipes.
 Example:
