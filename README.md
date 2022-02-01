@@ -62,6 +62,7 @@ The crypto is experimental, however don't be stupid. echo'ing "password", or "ab
 
 ## Changelog
 
+* 2022-02-01 patch#3 : The tool now requires -force flag to create bad/too weak seeds
 * 2022-02-01 patch#2 : Added flags and more usability stuff
 * 2022-02-01 patch#1 : Some bugs found and fixed after public release, thanks to people at lobste.rs
 * ~3-4yrs ago: Initial write
