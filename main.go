@@ -93,8 +93,9 @@ func main() {
 	}
 
 	if info.Mode()&os.ModeCharDevice != 0 || info.Size() <= 0 {
-		fmt.Println("The command is intended to work with pipes.")
-		fmt.Println("Usage: echo 'never lose a key again 81S1r8zpVuFjpJ5odwDTmplp4HZ5JskQ' | anything2ed25519")
+		flag.Usage()
+		fmt.Println("\n\nThe command is intended to work with pipes.")
+		fmt.Println("Example: \n\techo 'never lose a key again 81S1r8zpVuFjpJ5odwDTmplp4HZ5JskQ' | anything2ed25519")
 		return
 	}
 
