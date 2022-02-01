@@ -1,5 +1,17 @@
 # Make a SSH Ed25519 private/public keypair of **anything** you can pipe into a UNIX pipe
 
+```
+Usage of anything2ed25519:
+  -privfile string
+    	Filename to write private key to (default "id_ed25519")
+  -privtoerr
+    	When true, the tool prints private key to stderr and public to stdout
+  -pubfile string
+    	Filename to write public key to (default "id_ed25519.pub")
+  -write
+    	When true it writes the private and public keys to file (default true)
+```
+
 ## Compile
 
 ```
@@ -40,7 +52,8 @@ The crypto is experimental, however don't be stupid. echo'ing "password", or "ab
 
 ## Changelog
 
-* 2022-02-01: Some bugs found and fixed after public release, thanks to people at lobste.rs
+* 2022-02-01 patch#2 : Added flags and more usability stuff
+* 2022-02-01 patch#1 : Some bugs found and fixed after public release, thanks to people at lobste.rs
 * ~3-4yrs ago: Initial write
 
 ## Author

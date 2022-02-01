@@ -3,6 +3,7 @@ package main
 import (
 	"crypto"
 	"encoding/pem"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -43,9 +44,6 @@ func GenerateKeys(bytes []byte) ([]byte, []byte, error) {
 	}
 	privateKey := pem.EncodeToMemory(pemKey)
 	formattedPublicKey := ssh.MarshalAuthorizedKey(publicKey)
-
-	fmt.Printf("%s\n", privateKey)
-	fmt.Printf("%s\n", formattedPublicKey)
 	return formattedPublicKey, privateKey, nil
 }
 
@@ -76,7 +74,19 @@ func GenPrivKeyFromSecret(secret []byte) ed25519.PrivateKey {
 	return privKey
 }
 
+var (
+	printPrivToStdErr bool
+	writeToFiles      bool
+	pubKeyFile        string
+	privKeyFile       string
+)
+
 func main() {
+	flag.BoolVar(&printPrivToStdErr, "privtoerr", false, "When true, the tool prints private key to stderr and public to stdout")
+	flag.BoolVar(&writeToFiles, "write", true, "When true it writes the private and public keys to file")
+	flag.StringVar(&pubKeyFile, "pubfile", "id_ed25519.pub", "Filename to write public key to")
+	flag.StringVar(&privKeyFile, "privfile", "id_ed25519", "Filename to write private key to")
+	flag.Parse()
 	info, err := os.Stdin.Stat()
 	if err != nil {
 		panic(err)
@@ -100,6 +110,15 @@ func main() {
 		return
 	}
 
-	_ = ioutil.WriteFile("id_ed25519", privateKey, 0600)
-	_ = ioutil.WriteFile("id_ed25519.pub", publicKey, 0644)
+	if printPrivToStdErr {
+		fmt.Fprintf(os.Stderr, "%s\n", privateKey)
+	} else {
+		fmt.Printf("%s\n", privateKey)
+	}
+	fmt.Printf("%s\n", publicKey)
+
+	if writeToFiles {
+		_ = ioutil.WriteFile(privKeyFile, privateKey, 0600)
+		_ = ioutil.WriteFile(pubKeyFile, publicKey, 0644)
+	}
 }
