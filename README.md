@@ -10,6 +10,11 @@ Usage of anything2ed25519:
     	Filename to write public key to (default "id_ed25519.pub")
   -write
     	When true it writes the private and public keys to file (default true)
+
+
+The command is intended to work with pipes.
+Example:
+	echo 'never lose a key again 81S1r8zpVuFjpJ5odwDTmplp4HZ5JskQ' | anything2ed25519
 ```
 
 ## Install (for golang users)
