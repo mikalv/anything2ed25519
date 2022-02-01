@@ -5,7 +5,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	// This is just a forked golang.org/x/crypto/ed25519/internal/edwards25519 repo (find it at https://go.googlesource.com/crypto - ed25519/internal)
@@ -24,6 +23,30 @@ func MakeHash(data []byte) []byte {
 	h.Write(data)
 	digest := h.Sum(nil)
 	return digest
+}
+
+func GenerateKeys(bytes []byte) ([]byte, []byte, error) {
+	// Generate a new private/public keypair for OpenSSH
+	privKey := GenPrivKeyFromSecret(bytes)
+	pubKey := getPublicKey(privKey)
+	publicKey, err := ssh.NewPublicKey(pubKey)
+
+	if err != nil {
+		fmt.Println("ERROR")
+		fmt.Println(err)
+		return nil, nil, err
+	}
+
+	pemKey := &pem.Block{
+		Type:  "OPENSSH PRIVATE KEY",
+		Bytes: edkey.MarshalED25519PrivateKey(privKey),
+	}
+	privateKey := pem.EncodeToMemory(pemKey)
+	formattedPublicKey := ssh.MarshalAuthorizedKey(publicKey)
+
+	fmt.Printf("%s\n", privateKey)
+	fmt.Printf("%s\n", formattedPublicKey)
+	return formattedPublicKey, privateKey, nil
 }
 
 // Generate the public key corresponding to the already hashed private
@@ -48,8 +71,7 @@ func getPublicKey(privateKey []byte) ed25519.PublicKey {
 // NOTE: secret should be the output of a KDF like bcrypt,
 // if it's derived from user input.
 func GenPrivKeyFromSecret(secret []byte) ed25519.PrivateKey {
-	seed := MakeHash(secret) // Not Ripemd160 because we want 32 bytes.
-
+	seed := MakeHash(secret)
 	privKey := ed25519.NewKeyFromSeed(seed)
 	return privKey
 }
@@ -66,34 +88,18 @@ func main() {
 		return
 	}
 
-	//reader := bufio.NewReader(os.Stdin)
 	bytes, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
-		log.Printf("Failed to read from STDIN: %v", err)
+		fmt.Printf("Failed to read from STDIN: %v\n", err)
 		return
 	}
-	// Generate a new private/public keypair for OpenSSH
-	privKey := GenPrivKeyFromSecret(bytes)
-	pubKey := getPublicKey(privKey)
-	//pubKey, privKey, _ := ed25519.GenerateKey(reader)
-	publicKey, err := ssh.NewPublicKey(pubKey)
 
+	publicKey, privateKey, err := GenerateKeys(bytes)
 	if err != nil {
-		fmt.Println("ERROR")
-		fmt.Println(err)
+		fmt.Printf("Failed to generate keys: %v\n", err)
 		return
 	}
-
-	pemKey := &pem.Block{
-		Type:  "OPENSSH PRIVATE KEY",
-		Bytes: edkey.MarshalED25519PrivateKey(privKey),
-	}
-	privateKey := pem.EncodeToMemory(pemKey)
-	authorizedKey := ssh.MarshalAuthorizedKey(publicKey)
-
-	fmt.Printf("%s\n", privateKey)
-	fmt.Printf("%s\n", authorizedKey)
 
 	_ = ioutil.WriteFile("id_ed25519", privateKey, 0600)
-	_ = ioutil.WriteFile("id_ed25519.pub", authorizedKey, 0644)
+	_ = ioutil.WriteFile("id_ed25519.pub", publicKey, 0644)
 }
