@@ -17,14 +17,13 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-func MakeHash(data []byte) string {
+func MakeHash(data []byte) []byte {
 	var hash crypto.Hash
 	hash = crypto.SHA256
 	h := hash.New()
 	h.Write(data)
 	digest := h.Sum(nil)
-	sh := string(fmt.Sprintf("%x\n", digest))
-	return sh
+	return digest
 }
 
 // Generate the public key corresponding to the already hashed private
@@ -51,7 +50,7 @@ func getPublicKey(privateKey []byte) ed25519.PublicKey {
 func GenPrivKeyFromSecret(secret []byte) ed25519.PrivateKey {
 	seed := MakeHash(secret) // Not Ripemd160 because we want 32 bytes.
 
-	privKey := ed25519.NewKeyFromSeed([]byte(seed)[:32])
+	privKey := ed25519.NewKeyFromSeed(seed)
 	return privKey
 }
 
