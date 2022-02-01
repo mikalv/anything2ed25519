@@ -38,6 +38,10 @@ Check out the directory `bin`
 
 The crypto is experimental, however don't be stupid. echo'ing "password", or "abc" or "hello world" or anything common into anything2ed25519 - **don't ever** use that anywhere, since people can guess your private key.. This is like a bitcoin "mnemonic code" and should have at least 24 words..
 
+## Changelog
+
+* 2022-02-01: Some bugs found and fixed after public release, thanks to people at lobste.rs
+* ~3-4yrs ago: Initial write
 
 ## Author
 
