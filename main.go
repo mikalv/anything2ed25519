@@ -62,14 +62,14 @@ func main() {
 
 	if info.Mode()&os.ModeCharDevice != 0 || info.Size() <= 0 {
 		fmt.Println("The command is intended to work with pipes.")
-		fmt.Println("Usage: echo 'ALDRI mist keys igjen' | ed25519cow")
+		fmt.Println("Usage: echo 'never lose a key again 81S1r8zpVuFjpJ5odwDTmplp4HZ5JskQ' | anything2ed25519")
 		return
 	}
 
 	//reader := bufio.NewReader(os.Stdin)
 	bytes, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
-		log.Printf("Failed to read: %v", err)
+		log.Printf("Failed to read from STDIN: %v", err)
 		return
 	}
 	// Generate a new private/public keypair for OpenSSH
