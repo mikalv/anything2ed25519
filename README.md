@@ -3,10 +3,9 @@
 ## Compile
 
 ```
-mkdir go
-export GOLANG=$(pwd)/go
-cd go ; mkdir -p src/0xcc.re
-cd src/0xcc.re
+export GOLANG="$PWD/go"
+mkdir -p go/src/0xcc.re
+cd go/src/0xcc.re
 git clone https://github.com/mikalv/anything2ed25519.git
 cd anything2ed25519
 ./build.sh
