@@ -12,6 +12,10 @@ Usage of anything2ed25519:
     	When true it writes the private and public keys to file (default true)
 ```
 
+## Install (for golang users)
+
+`go install 0xcc.re/anything2ed25519@latest`
+
 ## Compile
 
 ```
